@@ -1,9 +1,15 @@
 package diary.entry;
 
-public class IntegerEntry implements Entry {
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import java.time.LocalDateTime;
+
+@Immutable
+public class IntegerEntry extends Entry {
     private final int value;
 
-    public IntegerEntry(int value) {
+    public IntegerEntry(@Nonnull LocalDateTime timeStamp, int value) {
+        super(timeStamp);
         this.value = value;
     }
 
