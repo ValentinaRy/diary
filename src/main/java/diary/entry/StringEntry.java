@@ -17,4 +17,10 @@ public class StringEntry extends Entry {
     public String getValue() {
         return value;
     }
+
+    @Override
+    @Nonnull
+    public String printEntry() {
+        return super.printEntry() + ", strValue=" + value;
+    }
 }

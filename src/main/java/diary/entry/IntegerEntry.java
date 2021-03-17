@@ -16,4 +16,10 @@ public class IntegerEntry extends Entry {
     public int getValue() {
         return value;
     }
+
+    @Override
+    @Nonnull
+    public String printEntry() {
+        return super.printEntry() + ", intValue=" + value;
+    }
 }

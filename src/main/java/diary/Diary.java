@@ -20,4 +20,16 @@ public class Diary {
     public boolean canAccess(User user) {
         return owner.equals(user);
     }
+
+    @Nonnull
+    public String printDiary() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Diary of ").append(owner.getName()).append(EOL);
+        entries.forEach((name, list) -> {
+            builder.append("Entries ").append(name).append(":");
+            list.forEach(entry -> builder.append(entry.printEntry()).append(";"));
+            builder.append(EOL);
+        });
+        return builder.toString();
+    }
 }

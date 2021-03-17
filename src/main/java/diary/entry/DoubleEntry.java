@@ -16,4 +16,10 @@ public class DoubleEntry extends Entry {
     public double getValue() {
         return value;
     }
+
+    @Override
+    @Nonnull
+    public String printEntry() {
+        return super.printEntry() + ", doubleValue=" + value;
+    }
 }
