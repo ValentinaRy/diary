@@ -18,7 +18,15 @@ public class CmdServer extends Server {
         String[] args = line.split(" ");
         checkState(args.length > 0, "No arguments were passed");
         switch (args[0]) {
-
+            case "create":
+                processCreateCommand(args);
+                break;
+            default:
+                throw new IllegalArgumentException("No such command: "+args[0]);
         }
+    }
+
+    private static void processCreateCommand(String[] args) {
+
     }
 }
