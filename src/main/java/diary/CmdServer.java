@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkState;
+
 public class CmdServer extends Server {
     private static Map<User, Diary> diaryPerUserMap;
 
@@ -13,6 +15,10 @@ public class CmdServer extends Server {
     }
 
     private static void processSingleCommand(String line) {
-        // TODO: develop reading commands from command line
+        String[] args = line.split(" ");
+        checkState(args.length > 0, "No arguments were passed");
+        switch (args[0]) {
+
+        }
     }
 }
