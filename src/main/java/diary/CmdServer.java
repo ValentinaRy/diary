@@ -21,12 +21,8 @@ public class CmdServer extends Server {
 
     private static void printHelpInfo() {
         System.out.println("List of all available commands");
-        System.out.println("create user <login> <password> <name> [-about <about>]");
-        System.out.println("create diary <login> <password>");
-        System.out.println("create entry <login> <password> <type> <value>");
-        System.out.println("print logins");
-        System.out.println("print user <login> <password>");
-        System.out.println("print diary <login> <password> [<type>]");
+        CreateCommandProcessor.printHelpInfo();
+        PrintCommandProcessor.printHelpInfo();
     }
 
     private static void processSingleCommand(String line) {
@@ -34,14 +30,13 @@ public class CmdServer extends Server {
         checkState(args.length > 0, "No arguments were passed");
         switch (args[0]) {
             case "create":
-                processCreateCommand(args);
+                CreateCommandProcessor.processCreateCommand(args);
                 break;
+            case "print":
+                PrintCommandProcessor.processPrintCommand(args);
             default:
                 throw new IllegalArgumentException("No such command: " + args[0]);
         }
     }
 
-    private static void processCreateCommand(String[] args) {
-
-    }
 }
