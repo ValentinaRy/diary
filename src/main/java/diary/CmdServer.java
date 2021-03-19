@@ -1,5 +1,6 @@
 package diary;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -37,6 +38,10 @@ public class CmdServer extends Server {
             default:
                 throw new IllegalArgumentException("No such command: " + args[0]);
         }
+    }
+
+    static boolean addUser(@Nonnull User user) {
+        return users.add(user);
     }
 
 }
