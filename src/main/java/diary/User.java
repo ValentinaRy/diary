@@ -1,16 +1,18 @@
 package diary;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class User {
     @Nonnull private final String login;
     @Nonnull private final String password;
     @Nonnull private final String name;
-    @Nonnull private final String about;
+    @Nullable
+    private final String about;
 
     public User(@Nonnull String login, @Nonnull String password,
-                @Nonnull String name, @Nonnull String about) {
+                @Nonnull String name, @Nullable String about) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -32,7 +34,7 @@ public class User {
         return name;
     }
 
-    @Nonnull
+    @Nullable
     public String getAbout() {
         return about;
     }
