@@ -2,12 +2,16 @@ package diary;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkState;
 
 public class CmdServer extends Server {
-    private static Map<User, Diary> diaryPerUserMap;
+    private static Set<User> users = new HashSet<>();
+    private static Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
     public static void main(String args[]) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -22,7 +26,7 @@ public class CmdServer extends Server {
                 processCreateCommand(args);
                 break;
             default:
-                throw new IllegalArgumentException("No such command: "+args[0]);
+                throw new IllegalArgumentException("No such command: " + args[0]);
         }
     }
 
