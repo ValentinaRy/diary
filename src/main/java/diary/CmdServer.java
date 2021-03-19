@@ -14,8 +14,19 @@ public class CmdServer extends Server {
     private static Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
     public static void main(String args[]) {
+        printHelpInfo();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         reader.lines().forEach(CmdServer::processSingleCommand);
+    }
+
+    private static void printHelpInfo() {
+        System.out.println("List of all available commands");
+        System.out.println("create user <login> <password> <name> [-about <about>]");
+        System.out.println("create diary <login> <password>");
+        System.out.println("create entry <login> <password> <type> <value>");
+        System.out.println("print logins");
+        System.out.println("print user <login> <password>");
+        System.out.println("print diary <login> <password> [<type>]");
     }
 
     private static void processSingleCommand(String line) {
