@@ -14,13 +14,21 @@ public class CmdServer extends Server {
     public static void main(String args[]) {
         printHelpInfo();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        reader.lines().forEach(CmdServer::processSingleCommand);
+        reader.lines().forEach(CmdServer::processSingleCommandSafe);
     }
 
     private static void printHelpInfo() {
         System.out.println("List of all available commands");
         CreateCommandProcessor.printHelpInfo();
         PrintCommandProcessor.printHelpInfo();
+    }
+
+    private static void processSingleCommandSafe(String line) {
+        try {
+            processSingleCommand(line);
+        } catch (IllegalStateException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
     }
 
     private static void processSingleCommand(String line) {
