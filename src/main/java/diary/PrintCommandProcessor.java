@@ -13,7 +13,7 @@ public class PrintCommandProcessor {
         checkState(args.length > 1, "No arguments for print command were passed");
         switch (args[1]) {
             case "logins":
-                printLoginsCommand(args);
+                printLoginsCommand();
                 break;
             case "user":
                 printUserCommand(args);
@@ -26,8 +26,9 @@ public class PrintCommandProcessor {
         }
     }
 
-    private static void printLoginsCommand(String[] args) {
-        // TODO: implement method
+    private static void printLoginsCommand() {
+        CmdServer.getUsers().values().forEach(user ->
+                System.out.println(user.getLogin()));
     }
 
     private static void printUserCommand(String[] args) {

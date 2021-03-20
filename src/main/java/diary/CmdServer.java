@@ -3,15 +3,12 @@ package diary;
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkState;
 
 public class CmdServer extends Server {
-    private static Set<User> users = new HashSet<>();
+    private static Map<String, User> users = new HashMap<>();
     private static Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
     public static void main(String args[]) {
@@ -35,13 +32,17 @@ public class CmdServer extends Server {
                 break;
             case "print":
                 PrintCommandProcessor.processPrintCommand(args);
+                break;
             default:
                 throw new IllegalArgumentException("No such command: " + args[0]);
         }
     }
 
     static boolean addUser(@Nonnull User user) {
-        return users.add(user);
+        return users.putIfAbsent(user.getLogin(), user) == null;
     }
 
+    static Map<String, User> getUsers() {
+        return users;
+    }
 }
