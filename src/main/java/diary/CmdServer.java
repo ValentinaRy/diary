@@ -53,4 +53,8 @@ public class CmdServer extends Server {
     static Map<String, User> getUsers() {
         return users;
     }
+
+    static boolean createDiary(User user) {
+        return diaryPerUserMap.putIfAbsent(user, new Diary(user)) == null;
+    }
 }

@@ -52,7 +52,16 @@ public class CreateCommandProcessor {
     }
 
     private static void createDiaryCommand(String[] args) {
-        // TODO: implement method
+        checkState(args.length > 4, "Not enough arguments for diary creation");
+        String login = args[2];
+        String password = args[3];
+        User user = CmdServer.getUsers().get(login);
+        checkState(user != null && user.getPassword().equals(password), "Wrong login or password");
+        if (CmdServer.createDiary(user)) {
+            System.out.println("Diary was created for " + user.getLogin());
+        } else {
+            System.out.println("Error: diary already exists");
+        }
     }
 
     private static void createEntryCommand(String[] args) {
