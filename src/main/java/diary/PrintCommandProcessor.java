@@ -6,7 +6,7 @@ public class PrintCommandProcessor {
     public static void printHelpInfo() {
         System.out.println("print logins");
         System.out.println("print user <login> <password>");
-        System.out.println("print diary <login> <password> [<type>]");
+        System.out.println("print diary <login> <password> [<entry_name>]");
     }
 
     public static void processPrintCommand(String[] args) {
@@ -43,8 +43,16 @@ public class PrintCommandProcessor {
         System.out.println("About: " + user.getAbout());
     }
 
-    // print diary <login> <password> [<type>]
+    // print diary <login> <password> [<entry_name>]
     private static void printDiaryCommand(String[] args) {
-        // TODO: implement method
+        checkState(args.length > 3, "Not enough arguments for printing diary");
+        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
+        String entryName = args.length > 4 ? args[4] : null;
+        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(user);
+        if (entryName == null) {
+            System.out.println(diary.printDiary());
+        } else {
+            System.out.println(diary.printByEntryName(entryName));
+        }
     }
 }

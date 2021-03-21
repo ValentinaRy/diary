@@ -31,11 +31,23 @@ public class Diary {
     public String printDiary() {
         StringBuilder builder = new StringBuilder();
         builder.append("Diary of ").append(owner.getName()).append(EOL);
-        entries.forEach((name, list) -> {
-            builder.append("Entries ").append(name).append(":");
-            list.forEach(entry -> builder.append(entry.printEntry()).append(";"));
-            builder.append(EOL);
-        });
+        entries.forEach((name, list) -> appendEntry(builder, name, list));
         return builder.toString();
+    }
+
+    @Nonnull String printByEntryName(String entryName) {
+        if (entries.containsKey(entryName)) {
+            StringBuilder builder = new StringBuilder();
+            appendEntry(builder, entryName, entries.get(entryName));
+            return builder.toString();
+        } else {
+            return "No entry found in diary with name " + entryName;
+        }
+    }
+
+    private void appendEntry(StringBuilder builder, String name, List<Entry> list) {
+        builder.append("Entries ").append(name).append(":");
+        list.forEach(entry -> builder.append(entry.printEntry()).append(";"));
+        builder.append(EOL);
     }
 }

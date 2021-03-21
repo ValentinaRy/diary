@@ -99,8 +99,7 @@ public class CreateCommandProcessor {
             default:
                 throw new IllegalStateException("Error: not supported entry type " + type);
         }
-        Diary diary = CmdServer.getDiary(user);
-        checkState(diary != null && diary.canAccess(user), "Error: no diary or cannot access");
+        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(user);
         diary.addEntry(entry_name, entry);
         System.out.println("Entry was added: " + entry.printEntry());
     }
