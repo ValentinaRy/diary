@@ -33,10 +33,7 @@ public class PrintCommandProcessor {
 
     private static void printUserCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing user");
-        String login = args[2];
-        String password = args[3];
-        User user = CmdServer.getUsers().get(login);
-        checkState(user != null && user.getPassword().equals(password), "Wrong login or password");
+        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         System.out.println("User information");
         System.out.println("Login: " + user.getLogin());
         System.out.println("Password: " + user.getPassword());
