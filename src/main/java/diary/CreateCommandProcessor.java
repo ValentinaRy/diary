@@ -31,8 +31,9 @@ public class CreateCommandProcessor {
                 break;
             case "entry":
                 createEntryCommand(args);
+                break;
             default:
-                throw new IllegalArgumentException("No such parameter in create command: " + args[1]);
+                throw new IllegalStateException("No such parameter in create command: " + args[1]);
         }
     }
 
@@ -61,7 +62,7 @@ public class CreateCommandProcessor {
 
     // create diary <login> <password>
     private static void createDiaryCommand(String[] args) {
-        checkState(args.length > 4, "Not enough arguments for diary creation");
+        checkState(args.length > 3, "Not enough arguments for diary creation");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         if (CmdServer.createDiary(user)) {
             System.out.println("Diary was created for " + user.getLogin());

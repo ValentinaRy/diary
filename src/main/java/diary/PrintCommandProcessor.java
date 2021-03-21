@@ -22,7 +22,7 @@ public class PrintCommandProcessor {
                 printDiaryCommand(args);
                 break;
             default:
-                throw new IllegalArgumentException("No such parameter in create command: " + args[1]);
+                throw new IllegalStateException("No such parameter in create command: " + args[1]);
         }
     }
 

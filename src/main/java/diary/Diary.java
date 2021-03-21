@@ -46,8 +46,7 @@ public class Diary {
     }
 
     private void appendEntry(StringBuilder builder, String name, List<Entry> list) {
-        builder.append("Entries ").append(name).append(":");
-        list.forEach(entry -> builder.append(entry.printEntry()).append(";"));
-        builder.append(EOL);
+        builder.append(name).append(":").append(EOL);
+        list.forEach(entry -> builder.append("    ").append(entry.printEntry()).append(";").append(EOL));
     }
 }

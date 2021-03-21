@@ -22,6 +22,7 @@ public class CmdServer extends Server {
         System.out.println("List of all available commands");
         CreateCommandProcessor.printHelpInfo();
         PrintCommandProcessor.printHelpInfo();
+        System.out.print(">");
     }
 
     private static void processSingleCommandSafe(String line) {
@@ -43,8 +44,9 @@ public class CmdServer extends Server {
                 PrintCommandProcessor.processPrintCommand(args);
                 break;
             default:
-                throw new IllegalArgumentException("No such command: " + args[0]);
+                throw new IllegalStateException("No such command: " + args[0]);
         }
+        System.out.print(">");
     }
 
     static boolean addUser(@Nonnull User user) {
