@@ -1,4 +1,6 @@
-package diary;
+package diary.server;
+
+import diary.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -1,7 +1,9 @@
-package diary;
+package diary.server;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import diary.Diary;
+import diary.User;
 import diary.entry.DoubleEntry;
 import diary.entry.Entry;
 import diary.entry.IntegerEntry;

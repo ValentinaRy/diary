@@ -3,15 +3,13 @@ package diary;
 import diary.entry.Entry;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Diary {
     private static final String EOL = System.getProperty("line.separator");
     @Nonnull private final User owner;
-    @Nonnull private final Map<String, List<Entry>> entries;
+    @Nonnull private final Map<String, EntryList> entries;
 
     public Diary(@Nonnull User owner) {
         this.owner = owner;
@@ -23,7 +21,7 @@ public class Diary {
     }
 
     public void addEntry(String name, Entry entry) {
-        entries.putIfAbsent(name, new ArrayList<>());
+        entries.putIfAbsent(name, new EntryList());
         entries.get(name).add(entry);
     }
 
@@ -35,7 +33,8 @@ public class Diary {
         return builder.toString();
     }
 
-    @Nonnull String printByEntryName(String entryName) {
+    @Nonnull
+    public String printByEntryName(String entryName) {
         if (entries.containsKey(entryName)) {
             StringBuilder builder = new StringBuilder();
             appendEntry(builder, entryName, entries.get(entryName));
@@ -45,8 +44,8 @@ public class Diary {
         }
     }
 
-    private void appendEntry(StringBuilder builder, String name, List<Entry> list) {
+    private void appendEntry(StringBuilder builder, String name, EntryList list) {
         builder.append(name).append(":").append(EOL);
-        list.forEach(entry -> builder.append("    ").append(entry.printEntry()).append(";").append(EOL));
+        list.getEntries().forEach(entry -> builder.append("    ").append(entry.printEntry()).append(";").append(EOL));
     }
 }

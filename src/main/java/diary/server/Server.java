@@ -1,4 +1,4 @@
-package diary;
+package diary.server;
 
 public abstract class Server {
 }
