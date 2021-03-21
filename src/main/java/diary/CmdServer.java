@@ -59,4 +59,9 @@ public class CmdServer extends Server {
     static boolean createDiary(@Nonnull User user) {
         return diaryPerUserMap.putIfAbsent(user, new Diary(user)) == null;
     }
+
+    @Nullable
+    static Diary getDiary(@Nonnull User user) {
+        return diaryPerUserMap.get(user);
+    }
 }

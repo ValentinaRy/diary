@@ -26,11 +26,13 @@ public class PrintCommandProcessor {
         }
     }
 
+    // print logins
     private static void printLoginsCommand() {
         CmdServer.getUsers().values().forEach(user ->
                 System.out.println(user.getLogin()));
     }
 
+    // print user <login> <password>
     private static void printUserCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing user");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
@@ -41,6 +43,7 @@ public class PrintCommandProcessor {
         System.out.println("About: " + user.getAbout());
     }
 
+    // print diary <login> <password> [<type>]
     private static void printDiaryCommand(String[] args) {
         // TODO: implement method
     }

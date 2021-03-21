@@ -3,6 +3,7 @@ package diary;
 import diary.entry.Entry;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,11 @@ public class Diary {
 
     public boolean canAccess(User user) {
         return owner.equals(user);
+    }
+
+    public void addEntry(String name, Entry entry) {
+        entries.putIfAbsent(name, new ArrayList<>());
+        entries.get(name).add(entry);
     }
 
     @Nonnull
