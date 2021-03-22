@@ -13,12 +13,15 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkState;
 
 public class CmdServer extends Server {
-    private static final Storage storage = new FileStorage("users.txt", "diaries.txt");
+    private static final Storage storage = new FileStorage("storage/users.txt", "storage/diaries.txt");
     private static final Map<String, User> users = new HashMap<>();
     private static final Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
     public static void main(String[] args) {
-        storage.initLoad(users, diaryPerUserMap);
+        if (storage.initLoad(users, diaryPerUserMap)) {
+            System.out.println("Error: couldn't initialize server storage. Exiting program");
+            return;
+        }
         printHelpInfo();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         reader.lines().forEach(CmdServer::processSingleCommandSafe);
