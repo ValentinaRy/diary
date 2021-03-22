@@ -13,7 +13,7 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkState;
 
 public class CmdServer extends Server {
-    private static final Storage storage = new FileStorage();
+    private static final Storage storage = new FileStorage("users.txt", "diaries.txt");
     private static final Map<String, User> users = new HashMap<>();
     private static final Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
