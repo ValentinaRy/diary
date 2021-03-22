@@ -14,7 +14,6 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
@@ -31,18 +30,15 @@
             <version>23.5-jre</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.clerezza.ext</groupId>
+            <artifactId>org.json.simple</artifactId>
+            <version>0.4</version>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.5</version>
         </dependency>
-
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>javax.annotation</id>
-            <url>https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api</url>
-        </repository>
-    </repositories>
 
 </project>
