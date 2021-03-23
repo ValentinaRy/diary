@@ -2,6 +2,7 @@ package diary.server.storage;
 
 import diary.Diary;
 import diary.User;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
@@ -25,7 +26,7 @@ public class FileStorage extends  Storage {
     @Override
     public boolean initLoad(Map<String, User> users, Map<User, Diary> diaryPerUserMap) {
         boolean loadUsersError = loadUsers(users);
-        boolean loadDiariesError = loadDiaries(diaryPerUserMap);
+        boolean loadDiariesError = loadDiaries(diaryPerUserMap, users);
         return loadUsersError || loadDiariesError;
     }
 
@@ -34,8 +35,12 @@ public class FileStorage extends  Storage {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                User user = parseUser(line);
-                // TODO: add to storage
+                try {
+                    User user = parseUser(line);
+                    users.putIfAbsent(user.getLogin(), user);
+                } catch (JSONException ex) {
+                    System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
+                }
             }
             return false;
         } catch (Exception ex) {
@@ -55,7 +60,7 @@ public class FileStorage extends  Storage {
         return new User(login, password, name, about);
     }
 
-    private boolean loadDiaries(Map<User, Diary> diaryPerUserMap) {
+    private boolean loadDiaries(Map<User, Diary> diaryPerUserMap, Map<String, User> users) {
         // TODO: implement method
         return false;
     }
