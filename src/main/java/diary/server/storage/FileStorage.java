@@ -2,9 +2,7 @@ package diary.server.storage;
 
 import diary.Diary;
 import diary.User;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -47,14 +45,13 @@ public class FileStorage extends  Storage {
     }
 
     @Nonnull
-    private User parseUser(String line) throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject userObj = (JSONObject) parser.parse(line);
+    private User parseUser(String line) {
+        JSONObject userObj = new JSONObject(line);
 
-        String login = (String) userObj.get(LOGIN);
-        String password = (String) userObj.get(PASSWORD);
-        String name = (String) userObj.get(NAME);
-        String about = (String) userObj.get(ABOUT);
+        String login = userObj.getString(LOGIN);
+        String password = userObj.getString(PASSWORD);
+        String name = userObj.getString(NAME);
+        String about = userObj.has(ABOUT) ? userObj.getString(ABOUT) : null;
         return new User(login, password, name, about);
     }
 
