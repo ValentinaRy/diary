@@ -123,4 +123,9 @@ public class FileStorage extends  Storage {
         }
         return diary;
     }
+
+    @Override
+    public void flush(Map<String, User> users, Map<User, Diary> diaryPerUserMap) {
+        // TODO: implement flush to file
+    }
 }

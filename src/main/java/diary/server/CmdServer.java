@@ -31,6 +31,7 @@ public class CmdServer extends Server {
         System.out.println("List of all available commands");
         CreateCommandProcessor.printHelpInfo();
         PrintCommandProcessor.printHelpInfo();
+        System.out.println("flush");
         System.out.print(">");
     }
 
@@ -40,6 +41,7 @@ public class CmdServer extends Server {
         } catch (IllegalStateException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        System.out.print(">");
     }
 
     private static void processSingleCommand(@Nonnull String line) {
@@ -52,10 +54,11 @@ public class CmdServer extends Server {
             case "print":
                 PrintCommandProcessor.processPrintCommand(args);
                 break;
+            case "flush":
+                storage.flush(users, diaryPerUserMap);
             default:
                 throw new IllegalStateException("No such command: " + args[0]);
         }
-        System.out.print(">");
     }
 
     static boolean addUser(@Nonnull User user) {
