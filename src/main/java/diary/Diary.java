@@ -16,6 +16,10 @@ public class Diary {
         entries = new HashMap<>();
     }
 
+    public String getOwnerLogin() {
+        return owner.getLogin();
+    }
+
     public boolean canAccess(User user) {
         return owner.equals(user);
     }
