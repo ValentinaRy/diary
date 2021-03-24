@@ -2,12 +2,17 @@ package diary.server.storage;
 
 import diary.Diary;
 import diary.User;
+import diary.entry.DoubleEntry;
+import diary.entry.IntegerEntry;
+import diary.entry.StringEntry;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -18,6 +23,11 @@ public class FileStorage extends  Storage {
     private static final String NAME = "name";
     private static final String ABOUT = "about";
     private static final String OWNER = "owner";
+    public static final String ENTRIES = "entries";
+    public static final String TYPE = "type";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String VALUE = "value";
+    public static final String ENTRY_NAME = "name";
     @Nonnull private final String userFile;
     @Nonnull private String diaryFile;
 
@@ -88,7 +98,29 @@ public class FileStorage extends  Storage {
         String login = diaryObj.getString(OWNER);
         User owner = users.get(login);
         checkState(owner != null, "No owner in users with login " + login);
-        // TODO: implement loading entries
-        return new Diary(owner);
+        Diary diary = new Diary(owner);
+        if (diaryObj.has(ENTRIES)) {
+            JSONArray entries = diaryObj.getJSONArray(ENTRIES);
+            for (Object entryObj : entries) {
+                JSONObject entry = (JSONObject) entryObj;
+                String type = entry.getString(TYPE);
+                LocalDateTime timestamp = LocalDateTime.parse(entry.getString(TIMESTAMP));
+                String entryName = entry.getString(ENTRY_NAME);
+                switch (type) {
+                    case "integer":
+                        diary.addEntry(entryName, new IntegerEntry(timestamp, entry.getInt(VALUE)));
+                        break;
+                    case "double":
+                        diary.addEntry(entryName, new DoubleEntry(timestamp, entry.getDouble(VALUE)));
+                        break;
+                    case "string":
+                        diary.addEntry(entryName, new StringEntry(timestamp, entry.getString(VALUE)));
+                        break;
+                    default:
+                        throw new IllegalStateException("No such entry type: " + type);
+                }
+            }
+        }
+        return diary;
     }
 }
