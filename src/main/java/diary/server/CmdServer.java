@@ -56,6 +56,7 @@ public class CmdServer extends Server {
                 break;
             case "flush":
                 storage.flush(users, diaryPerUserMap);
+                break;
             default:
                 throw new IllegalStateException("No such command: " + args[0]);
         }

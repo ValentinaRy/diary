@@ -11,7 +11,9 @@ import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -135,7 +137,26 @@ public class FileStorage extends  Storage {
     }
 
     private void flushUsers(@Nonnull Map<String, User> users) {
-        // TODO: implement method
+        try (FileWriter fileWriter = new FileWriter(userFile)) {
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            for (User user : users.values()) {
+                bufferedWriter.write(userToJson(user) +"\n");
+            }
+            bufferedWriter.flush();
+            System.out.println("Finished users");
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    private String userToJson(User user) {
+        JSONObject userObj = new JSONObject();
+        userObj.put(LOGIN, user.getLogin());
+        userObj.put(PASSWORD, user.getPassword());
+        userObj.put(NAME, user.getName());
+        if (user.getAbout() != null)
+            userObj.put(ABOUT, user.getAbout());
+        return userObj.toString();
     }
 
     private void flushDiaries(@Nonnull Map<User, Diary> diaryPerUserMap) {
