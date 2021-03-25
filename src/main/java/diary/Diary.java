@@ -30,6 +30,11 @@ public class Diary {
     }
 
     @Nonnull
+    public Map<String, EntryList> getEntries() {
+        return entries;
+    }
+
+    @Nonnull
     public String printDiary() {
         StringBuilder builder = new StringBuilder();
         builder.append("Diary of ").append(owner.getName()).append(EOL);

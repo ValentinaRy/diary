@@ -3,6 +3,7 @@ package diary.server.storage;
 import diary.Diary;
 import diary.User;
 import diary.entry.DoubleEntry;
+import diary.entry.Entry;
 import diary.entry.IntegerEntry;
 import diary.entry.StringEntry;
 import org.json.JSONArray;
@@ -143,7 +144,7 @@ public class FileStorage extends  Storage {
                 bufferedWriter.write(userToJson(user) +"\n");
             }
             bufferedWriter.flush();
-            System.out.println("Finished users");
+            System.out.println("Flushed users");
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -160,6 +161,43 @@ public class FileStorage extends  Storage {
     }
 
     private void flushDiaries(@Nonnull Map<User, Diary> diaryPerUserMap) {
-        // TODO: implement method
+        try (FileWriter fileWriter = new FileWriter(diaryFile)) {
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            for (Diary diary : diaryPerUserMap.values()) {
+                bufferedWriter.write(diaryToJson(diary) + "\n");
+            }
+            bufferedWriter.flush();
+            System.out.println("Flushed diaries");
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    private String diaryToJson(Diary diary) {
+        JSONObject diaryObj = new JSONObject();
+        diaryObj.put(OWNER, diary.getOwnerLogin());
+        if (diary.getEntries().size() > 0) {
+            JSONArray entries = new JSONArray();
+            diary.getEntries().forEach((name, entryList) -> {
+                for (Entry entry : entryList.getEntries()) {
+                    JSONObject entryObj = new JSONObject();
+                    entryObj.put(ENTRY_NAME, name);
+                    if (entry instanceof IntegerEntry) {
+                        entryObj.put(TYPE, "integer");
+                        entryObj.put(VALUE, ((IntegerEntry) entry).getValue());
+                    } else if (entry instanceof DoubleEntry) {
+                        entryObj.put(TYPE, "double");
+                        entryObj.put(VALUE, ((DoubleEntry) entry).getValue());
+                    } else if (entry instanceof StringEntry) {
+                        entryObj.put(TYPE, "string");
+                        entryObj.put(VALUE, ((StringEntry) entry).getValue());
+                    }
+                    entryObj.put(TIMESTAMP, entry.getTimeStamp().toString());
+                    entries.put(entryObj);
+                }
+            });
+            diaryObj.put(ENTRIES, entries);
+        }
+        return diaryObj.toString();
     }
 }
