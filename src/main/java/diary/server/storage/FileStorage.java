@@ -38,27 +38,29 @@ public class FileStorage extends  Storage {
 
     @Override
     public boolean initLoad(Map<String, User> users, Map<User, Diary> diaryPerUserMap) {
-        boolean loadUsersError = loadUsers(users);
-        boolean loadDiariesError = loadDiaries(diaryPerUserMap, users);
-        return loadUsersError || loadDiariesError;
+        boolean loadUsers = loadUsers(users);
+        boolean loadDiaries = loadDiaries(diaryPerUserMap, users);
+        return loadUsers && loadDiaries;
     }
 
     private boolean loadUsers(Map<String, User> users) {
         try (FileReader fileReader = new FileReader(userFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
+            int errorLines = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 try {
                     User user = parseUser(line);
                     users.putIfAbsent(user.getLogin(), user);
                 } catch (JSONException ex) {
                     System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
+                    errorLines++;
                 }
             }
-            return false;
+            return errorLines == 0;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
-            return true;
+            return false;
         }
     }
 
@@ -77,18 +79,20 @@ public class FileStorage extends  Storage {
         try (FileReader fileReader = new FileReader(diaryFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
+            int errorLines = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 try {
                     Diary diary = parseDiary(line, users);
                     diaryPerUserMap.put(users.get(diary.getOwnerLogin()), diary);
                 } catch (JSONException ex) {
                     System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
+                    errorLines++;
                 }
             }
-            return false;
+            return errorLines == 0;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
-            return true;
+            return false;
         }
     }
 

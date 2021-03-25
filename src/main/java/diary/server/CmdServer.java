@@ -18,7 +18,7 @@ public class CmdServer extends Server {
     private static final Map<User, Diary> diaryPerUserMap = new HashMap<>();
 
     public static void main(String[] args) {
-        if (storage.initLoad(users, diaryPerUserMap)) {
+        if (!storage.initLoad(users, diaryPerUserMap)) {
             System.out.println("Error: couldn't initialize server storage. Exiting program");
             return;
         }
