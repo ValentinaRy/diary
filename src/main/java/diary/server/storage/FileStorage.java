@@ -37,13 +37,13 @@ public class FileStorage extends  Storage {
     }
 
     @Override
-    public boolean initLoad(Map<String, User> users, Map<User, Diary> diaryPerUserMap) {
+    public boolean initLoad(@Nonnull Map<String, User> users, @Nonnull Map<User, Diary> diaryPerUserMap) {
         boolean loadUsers = loadUsers(users);
         boolean loadDiaries = loadDiaries(diaryPerUserMap, users);
         return loadUsers && loadDiaries;
     }
 
-    private boolean loadUsers(Map<String, User> users) {
+    private boolean loadUsers(@Nonnull Map<String, User> users) {
         try (FileReader fileReader = new FileReader(userFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -65,7 +65,7 @@ public class FileStorage extends  Storage {
     }
 
     @Nonnull
-    private User parseUser(String line) {
+    private User parseUser(@Nonnull String line) {
         JSONObject userObj = new JSONObject(line);
 
         String login = userObj.getString(LOGIN);
@@ -75,7 +75,7 @@ public class FileStorage extends  Storage {
         return new User(login, password, name, about);
     }
 
-    private boolean loadDiaries(Map<User, Diary> diaryPerUserMap, Map<String, User> users) {
+    private boolean loadDiaries(@Nonnull Map<User, Diary> diaryPerUserMap, @Nonnull Map<String, User> users) {
         try (FileReader fileReader = new FileReader(diaryFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -96,7 +96,7 @@ public class FileStorage extends  Storage {
         }
     }
 
-    private Diary parseDiary(String line, Map<String, User> users) {
+    private Diary parseDiary(@Nonnull String line, @Nonnull Map<String, User> users) {
         JSONObject diaryObj = new JSONObject(line);
 
         String login = diaryObj.getString(OWNER);
@@ -129,7 +129,16 @@ public class FileStorage extends  Storage {
     }
 
     @Override
-    public void flush(Map<String, User> users, Map<User, Diary> diaryPerUserMap) {
-        // TODO: implement flush to file
+    public void flush(@Nonnull Map<String, User> users, @Nonnull Map<User, Diary> diaryPerUserMap) {
+        flushUsers(users);
+        flushDiaries(diaryPerUserMap);
+    }
+
+    private void flushUsers(@Nonnull Map<String, User> users) {
+        // TODO: implement method
+    }
+
+    private void flushDiaries(@Nonnull Map<User, Diary> diaryPerUserMap) {
+        // TODO: implement method
     }
 }
