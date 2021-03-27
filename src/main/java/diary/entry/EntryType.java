@@ -7,7 +7,7 @@ public enum EntryType {
 
     private final String string;
 
-    private EntryType(String string) {
+    EntryType(String string) {
         this.string = string;
     }
 
@@ -15,7 +15,7 @@ public enum EntryType {
         return string;
     }
 
-    public EntryType parse(String string) {
+    public static EntryType parse(String string) {
         for (EntryType value : values()) {
             if (value.string().equals(string)) {
                 return value;

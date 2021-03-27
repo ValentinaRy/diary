@@ -2,10 +2,7 @@ package diary.server.storage;
 
 import diary.Diary;
 import diary.User;
-import diary.entry.DoubleEntry;
-import diary.entry.Entry;
-import diary.entry.IntegerEntry;
-import diary.entry.StringEntry;
+import diary.entry.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,17 +107,17 @@ public class FileStorage extends  Storage {
             JSONArray entries = diaryObj.getJSONArray(ENTRIES);
             for (Object entryObj : entries) {
                 JSONObject entry = (JSONObject) entryObj;
-                String type = entry.getString(TYPE);
+                EntryType type = EntryType.parse(entry.getString(TYPE));
                 LocalDateTime timestamp = LocalDateTime.parse(entry.getString(TIMESTAMP));
                 String entryName = entry.getString(ENTRY_NAME);
                 switch (type) {
-                    case "integer":
+                    case INTEGER:
                         diary.addEntry(entryName, new IntegerEntry(timestamp, entry.getInt(VALUE)));
                         break;
-                    case "double":
+                    case DOUBLE:
                         diary.addEntry(entryName, new DoubleEntry(timestamp, entry.getDouble(VALUE)));
                         break;
-                    case "string":
+                    case STRING:
                         diary.addEntry(entryName, new StringEntry(timestamp, entry.getString(VALUE)));
                         break;
                     default:
@@ -183,13 +180,13 @@ public class FileStorage extends  Storage {
                     JSONObject entryObj = new JSONObject();
                     entryObj.put(ENTRY_NAME, name);
                     if (entry instanceof IntegerEntry) {
-                        entryObj.put(TYPE, "integer");
+                        entryObj.put(TYPE, EntryType.INTEGER.string());
                         entryObj.put(VALUE, ((IntegerEntry) entry).getValue());
                     } else if (entry instanceof DoubleEntry) {
-                        entryObj.put(TYPE, "double");
+                        entryObj.put(TYPE, EntryType.DOUBLE.string());
                         entryObj.put(VALUE, ((DoubleEntry) entry).getValue());
                     } else if (entry instanceof StringEntry) {
-                        entryObj.put(TYPE, "string");
+                        entryObj.put(TYPE, EntryType.STRING.string());
                         entryObj.put(VALUE, ((StringEntry) entry).getValue());
                     }
                     entryObj.put(TIMESTAMP, entry.getTimeStamp().toString());
