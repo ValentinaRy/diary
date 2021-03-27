@@ -4,14 +4,12 @@ import static com.google.common.base.Preconditions.checkState;
 
 import diary.Diary;
 import diary.User;
-import diary.entry.DoubleEntry;
-import diary.entry.Entry;
-import diary.entry.IntegerEntry;
-import diary.entry.StringEntry;
+import diary.entry.*;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CreateCommandProcessor {
     public static void printHelpInfo() {
@@ -19,7 +17,7 @@ public class CreateCommandProcessor {
         System.out.println("create user <login> <password> <name> [-about <about>]");
         System.out.println("create diary <login> <password>");
         System.out.println("create entry <login> <password> <entry_name> <type> <value> [-timeStamp <timeStamp>]");
-        System.out.println("Entry types: integer, double, string");
+        System.out.println("Entry types: " + Arrays.stream(EntryType.values()).map(EntryType::string).collect(Collectors.joining(", ")));
     }
 
     static void processCreateCommand(String[] args) {
@@ -78,19 +76,19 @@ public class CreateCommandProcessor {
         checkState(args.length > 6, "Not enough arguments for entry creation");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         String entry_name = args[4];
-        String type = args[5];
+        EntryType type = EntryType.parse(args[5]);
         int idx = ArrayUtils.indexOf(args, "-timeStamp");
         checkState(idx == -1 || idx > 6 && idx + 1 < args.length);
         LocalDateTime timeStamp = idx < 0 ? LocalDateTime.now() : LocalDateTime.parse(args[idx + 1]);
         Entry entry;
         switch (type) {
-            case "integer":
+            case INTEGER:
                 entry = new IntegerEntry(timeStamp, Integer.parseInt(args[6]));
                 break;
-            case "double":
+            case DOUBLE:
                 entry = new DoubleEntry(timeStamp, Double.parseDouble(args[6]));
                 break;
-            case "string":
+            case STRING:
                 String value;
                 if (idx < 0) { // no "timeStamp" section
                     value = String.join(" ", Arrays.copyOfRange(args, 6, args.length));
