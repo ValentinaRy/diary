@@ -7,12 +7,19 @@ import diary.User;
 import diary.entry.*;
 import org.apache.commons.lang.ArrayUtils;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class CreateCommandProcessor {
-    public static void printHelpInfo() {
+    @Nonnull private final Server server;
+
+    public CreateCommandProcessor(@Nonnull Server server) {
+        this.server = server;
+    }
+
+    public void printHelpInfo() {
         System.out.println("Constraints: <login> and <password> should be one word without spaces");
         System.out.println("create user <login> <password> <name> [-about <about>]");
         System.out.println("create diary <login> <password>");
@@ -20,7 +27,7 @@ public class CreateCommandProcessor {
         System.out.println("Entry types: " + Arrays.stream(EntryType.values()).map(EntryType::string).collect(Collectors.joining(", ")));
     }
 
-    static void processCreateCommand(String[] args) {
+    void processCreateCommand(String[] args) {
         checkState(args.length > 1, "No arguments for create command were passed");
         switch (args[1]) {
             case "user":
@@ -38,7 +45,7 @@ public class CreateCommandProcessor {
     }
 
     // create user <login> <password> <name> [-about <about>]
-    private static void createUserCommand(String[] args) {
+    private void createUserCommand(String[] args) {
         checkState(args.length > 4, "Not enough arguments for user creation");
         String login = args[2];
         String password = args[3];
@@ -53,7 +60,7 @@ public class CreateCommandProcessor {
             about = String.join(" ", Arrays.copyOfRange(args, idx + 1, args.length));
         }
         User user = new User(login, password, name, about);
-        if (CmdServer.addUser(user)) {
+        if (server.addUser(user)) {
             System.out.println("User was added: " + user.getLogin());
         } else {
             System.out.println("Error: user with this login already exists");
@@ -61,10 +68,10 @@ public class CreateCommandProcessor {
     }
 
     // create diary <login> <password>
-    private static void createDiaryCommand(String[] args) {
+    private void createDiaryCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for diary creation");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
-        if (CmdServer.createDiary(user)) {
+        if (server.createDiary(user)) {
             System.out.println("Diary was created for " + user.getLogin());
         } else {
             System.out.println("Error: diary already exists");
@@ -72,7 +79,7 @@ public class CreateCommandProcessor {
     }
 
     // create entry <login> <password> <entry_name> <type> <value> [-timeStamp <timeStamp>]
-    private static void createEntryCommand(String[] args) {
+    private void createEntryCommand(String[] args) {
         checkState(args.length > 6, "Not enough arguments for entry creation");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         String entry_name = args[4];
