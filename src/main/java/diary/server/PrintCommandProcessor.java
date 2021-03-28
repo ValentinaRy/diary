@@ -3,16 +3,24 @@ package diary.server;
 import diary.Diary;
 import diary.User;
 
+import javax.annotation.Nonnull;
+
 import static com.google.common.base.Preconditions.checkState;
 
 public class PrintCommandProcessor {
-    public static void printHelpInfo() {
+    @Nonnull private final Server server;
+
+    public PrintCommandProcessor(@Nonnull Server server) {
+        this.server = server;
+    }
+
+    public void printHelpInfo() {
         System.out.println("print logins");
         System.out.println("print user <login> <password>");
         System.out.println("print diary <login> <password> [<entry_name>]");
     }
 
-    public static void processPrintCommand(String[] args) {
+    public void processPrintCommand(String[] args) {
         checkState(args.length > 1, "No arguments for print command were passed");
         switch (args[1]) {
             case "logins":
@@ -30,13 +38,13 @@ public class PrintCommandProcessor {
     }
 
     // print logins
-    private static void printLoginsCommand() {
-        CmdServer.getUsers().values().forEach(user ->
+    private void printLoginsCommand() {
+        server.getUsers().values().forEach(user ->
                 System.out.println(user.getLogin()));
     }
 
     // print user <login> <password>
-    private static void printUserCommand(String[] args) {
+    private void printUserCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing user");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         System.out.println("User information");
@@ -47,7 +55,7 @@ public class PrintCommandProcessor {
     }
 
     // print diary <login> <password> [<entry_name>]
-    private static void printDiaryCommand(String[] args) {
+    private void printDiaryCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing diary");
         User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
         String entryName = args.length > 4 ? args[4] : null;
