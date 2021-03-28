@@ -9,8 +9,13 @@ import java.io.InputStreamReader;
 import static com.google.common.base.Preconditions.checkState;
 
 public class CmdServer extends Server {
+    @Nonnull private final CreateCommandProcessor createCommandProcessor;
+    @Nonnull private final PrintCommandProcessor printCommandProcessor;
+
     public CmdServer(Storage storage) {
         super(storage);
+        createCommandProcessor = new CreateCommandProcessor(this);
+        printCommandProcessor = new PrintCommandProcessor(this);
     }
 
     public void start() {
@@ -25,8 +30,8 @@ public class CmdServer extends Server {
 
     private void printHelpInfo() {
         System.out.println("List of all available commands");
-        CreateCommandProcessor.printHelpInfo();
-        PrintCommandProcessor.printHelpInfo();
+        createCommandProcessor.printHelpInfo();
+        printCommandProcessor.printHelpInfo();
         System.out.println("flush");
         System.out.print(">");
     }
@@ -45,10 +50,10 @@ public class CmdServer extends Server {
         checkState(args.length > 0, "No arguments were passed");
         switch (args[0]) {
             case "create":
-                CreateCommandProcessor.processCreateCommand(args);
+                createCommandProcessor.processCreateCommand(args);
                 break;
             case "print":
-                PrintCommandProcessor.processPrintCommand(args);
+                printCommandProcessor.processPrintCommand(args);
                 break;
             case "flush":
                 storage.flush(users, diaryPerUserMap);
