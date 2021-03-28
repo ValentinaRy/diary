@@ -70,7 +70,7 @@ public class CreateCommandProcessor {
     // create diary <login> <password>
     private void createDiaryCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for diary creation");
-        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
+        User user = CommandProcessorUtils.getUserIfPermitted(server, args[2], args[3]);
         if (server.createDiary(user)) {
             System.out.println("Diary was created for " + user.getLogin());
         } else {
@@ -81,7 +81,7 @@ public class CreateCommandProcessor {
     // create entry <login> <password> <entry_name> <type> <value> [-timeStamp <timeStamp>]
     private void createEntryCommand(String[] args) {
         checkState(args.length > 6, "Not enough arguments for entry creation");
-        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
+        User user = CommandProcessorUtils.getUserIfPermitted(server, args[2], args[3]);
         String entry_name = args[4];
         EntryType type = EntryType.parse(args[5]);
         int idx = ArrayUtils.indexOf(args, "-timeStamp");
@@ -107,7 +107,7 @@ public class CreateCommandProcessor {
             default:
                 throw new IllegalStateException("Error: not supported entry type " + type);
         }
-        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(user);
+        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(server, user);
         diary.addEntry(entry_name, entry);
         System.out.println("Entry was added: " + entry.printEntry());
     }

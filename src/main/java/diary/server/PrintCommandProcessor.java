@@ -46,7 +46,7 @@ public class PrintCommandProcessor {
     // print user <login> <password>
     private void printUserCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing user");
-        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
+        User user = CommandProcessorUtils.getUserIfPermitted(server, args[2], args[3]);
         System.out.println("User information");
         System.out.println("Login: " + user.getLogin());
         System.out.println("Password: " + user.getPassword());
@@ -57,9 +57,9 @@ public class PrintCommandProcessor {
     // print diary <login> <password> [<entry_name>]
     private void printDiaryCommand(String[] args) {
         checkState(args.length > 3, "Not enough arguments for printing diary");
-        User user = CommandProcessorUtils.getUserIfPermitted(args[2], args[3]);
+        User user = CommandProcessorUtils.getUserIfPermitted(server, args[2], args[3]);
         String entryName = args.length > 4 ? args[4] : null;
-        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(user);
+        Diary diary = CommandProcessorUtils.getDiaryIfPermitted(server, user);
         if (entryName == null) {
             System.out.println(diary.printDiary());
         } else {
