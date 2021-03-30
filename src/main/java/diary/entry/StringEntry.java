@@ -18,6 +18,12 @@ public class StringEntry extends Entry {
         return value;
     }
 
+    @Nonnull
+    @Override
+    public EntryType getEntryType() {
+        return EntryType.STRING;
+    }
+
     @Override
     @Nonnull
     public String printEntry() {

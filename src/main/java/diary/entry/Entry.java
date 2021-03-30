@@ -18,6 +18,9 @@ public abstract class Entry {
     }
 
     @Nonnull
+    public abstract EntryType getEntryType();
+
+    @Nonnull
     public String printEntry() {
         return "timeStamp=" +timeStamp.toString();
     }

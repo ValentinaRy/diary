@@ -17,6 +17,12 @@ public class IntegerEntry extends Entry {
         return value;
     }
 
+    @Nonnull
+    @Override
+    public EntryType getEntryType() {
+        return EntryType.INTEGER;
+    }
+
     @Override
     @Nonnull
     public String printEntry() {

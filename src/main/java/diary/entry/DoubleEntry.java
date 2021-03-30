@@ -17,6 +17,12 @@ public class DoubleEntry extends Entry {
         return value;
     }
 
+    @Nonnull
+    @Override
+    public EntryType getEntryType() {
+        return EntryType.DOUBLE;
+    }
+
     @Override
     @Nonnull
     public String printEntry() {
