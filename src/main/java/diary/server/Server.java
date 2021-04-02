@@ -39,11 +39,5 @@ public abstract class Server {
         return diaryPerUserMap.get(user);
     }
 
-    protected abstract void start();
-
-    public static void main(String[] args) {
-        Storage fileStorage = new FileStorage("storage/users.txt", "storage/diaries.txt");
-        Server server = new CmdServer(fileStorage);
-        server.start();
-    }
+    public abstract void start();
 }
