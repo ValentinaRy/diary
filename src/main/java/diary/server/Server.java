@@ -2,7 +2,6 @@ package diary.server;
 
 import diary.Diary;
 import diary.User;
-import diary.server.storage.FileStorage;
 import diary.server.storage.Storage;
 
 import javax.annotation.Nonnull;

@@ -1,18 +1,21 @@
 package diary;
 
-import diary.server.CmdServer;
 import diary.server.Server;
-import diary.server.storage.FileStorage;
-import diary.server.storage.Storage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
+@SpringBootApplication
 public class Application {
     public static void main(String[] args) {
-        new Application().start();
+        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+        run(context);
+        context.close();
     }
 
-    private void start() {
-        Storage fileStorage = new FileStorage("storage/users.txt", "storage/diaries.txt");
-        Server server = new CmdServer(fileStorage);
+    public static void run(ApplicationContext context) {
+        Server server = context.getBean(Server.class);
         server.start();
     }
 }
