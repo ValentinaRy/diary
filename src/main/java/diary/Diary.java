@@ -1,6 +1,7 @@
 package diary;
 
 import diary.entry.Entry;
+import diary.entry.EntryType;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -10,10 +11,12 @@ public class Diary {
     private static final String EOL = System.getProperty("line.separator");
     @Nonnull private final User owner;
     @Nonnull private final Map<String, EntryList> entries;
+    @Nonnull private final Map<String, EntryType> structure;
 
     public Diary(@Nonnull User owner) {
         this.owner = owner;
         entries = new HashMap<>();
+        structure = new HashMap<>();
     }
 
     public String getOwnerLogin() {
@@ -25,7 +28,14 @@ public class Diary {
     }
 
     public void addEntry(String name, Entry entry) {
-        entries.putIfAbsent(name, new EntryList());
+        if (structure.containsKey(name)) {
+            if (entry.getEntryType() != structure.get(name)) {
+                throw new IllegalStateException("You cannot add entries with different types but the same name: " + name);
+            }
+        } else {
+            structure.put(name, entry.getEntryType());
+            entries.put(name, new EntryList());
+        }
         entries.get(name).add(entry);
     }
 
