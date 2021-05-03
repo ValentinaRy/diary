@@ -19,10 +19,6 @@ public class CmdServer extends Server {
     }
 
     public void start() {
-        if (!storage.initLoad(users, diaryPerUserMap)) {
-            System.out.println("Error: couldn't initialize server storage. Exiting program");
-            return;
-        }
         printHelpInfo();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         reader.lines().forEach(this::processSingleCommandSafe);

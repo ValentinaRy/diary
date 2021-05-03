@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkState;
+
 public abstract class Server {
     @Nonnull protected final Storage storage;
     @Nonnull protected final Map<String, User> users;
@@ -18,6 +20,7 @@ public abstract class Server {
         this.storage = storage;
         this.users = new HashMap<>();
         this.diaryPerUserMap = new HashMap<>();
+        checkState(storage.initLoad(users, diaryPerUserMap), "Error: couldn't initialize server storage. Exiting program");
     }
 
     public boolean addUser(@Nonnull User user) {
