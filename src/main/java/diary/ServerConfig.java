@@ -1,6 +1,6 @@
 package diary;
 
-import diary.server.CmdServer;
+import diary.server.cmd.CmdServer;
 import diary.server.Server;
 import diary.server.storage.FileStorage;
 import diary.server.storage.Storage;

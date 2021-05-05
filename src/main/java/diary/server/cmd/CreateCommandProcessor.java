@@ -1,10 +1,11 @@
-package diary.server;
+package diary.server.cmd;
 
 import static com.google.common.base.Preconditions.checkState;
 
 import diary.Diary;
 import diary.User;
 import diary.entry.*;
+import diary.server.Server;
 import org.apache.commons.lang.ArrayUtils;
 
 import javax.annotation.Nonnull;

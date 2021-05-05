@@ -1,7 +1,8 @@
-package diary.server;
+package diary.server.cmd;
 
 import diary.Diary;
 import diary.User;
+import diary.server.Server;
 
 import javax.annotation.Nonnull;
 

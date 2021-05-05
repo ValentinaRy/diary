@@ -1,5 +1,6 @@
-package diary.server;
+package diary.server.cmd;
 
+import diary.server.Server;
 import diary.server.storage.Storage;
 
 import javax.annotation.Nonnull;
