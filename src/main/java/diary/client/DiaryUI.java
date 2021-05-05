@@ -1,4 +1,4 @@
-package diary.gui;
+package diary.client;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
