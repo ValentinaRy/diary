@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Configuration
 @PropertySource("classpath:diary.properties")
 public class ServerConfig {
@@ -26,7 +29,13 @@ public class ServerConfig {
 
     @Bean
     public Server server(Storage storage,
-                         @Value("${socket.server.port}") int port) {
-        return new SocketServer(storage, port);
+                         @Value("${socket.server.port}") int port,
+                         ExecutorService executor) {
+        return new SocketServer(storage, executor, port);
+    }
+
+    @Bean
+    public ExecutorService executorService() {
+        return Executors.newFixedThreadPool(4);
     }
 }

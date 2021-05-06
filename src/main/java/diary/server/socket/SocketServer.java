@@ -4,17 +4,18 @@ import diary.server.Server;
 import diary.server.storage.Storage;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 public class SocketServer extends Server {
+    private final ExecutorService executor;
     private final int port;
 
-    public SocketServer(@Nonnull Storage storage, int port) {
+    public SocketServer(@Nonnull Storage storage, ExecutorService executor, int port) {
         super(storage);
+        this.executor = executor;
         this.port = port;
         System.out.println("Socket server created with port number " + port);
     }
@@ -23,17 +24,9 @@ public class SocketServer extends Server {
     public void start() {
         try (ServerSocket server = new ServerSocket(port)) {
             Socket client = server.accept();
-            DataOutputStream clientOutput = new DataOutputStream(client.getOutputStream());
-            DataInputStream clientInput = new DataInputStream(client.getInputStream());
-            while (!client.isClosed()) {
-                String inMessage = clientInput.readUTF();
-                clientOutput.writeUTF("server response");
-                clientOutput.flush();
-            }
-            clientOutput.close();
-            clientInput.close();
-            client.close();
+            executor.execute(new ClientConnectionHandler(client));
         } catch (IOException e) {
+            System.out.println("Error while accepting new connections: "+e.getMessage());
             e.printStackTrace();
         }
     }
