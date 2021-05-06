@@ -3,6 +3,8 @@ package diary.server.storage;
 import diary.Diary;
 import diary.User;
 import diary.entry.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkState;
 
 public class FileStorage extends  Storage {
+    private static final Logger log = LogManager.getLogger(FileStorage.class);
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
@@ -29,12 +32,12 @@ public class FileStorage extends  Storage {
     public static final String VALUE = "value";
     public static final String ENTRY_NAME = "name";
     @Nonnull private final String userFile;
-    @Nonnull private String diaryFile;
+    @Nonnull private final String diaryFile;
 
     public FileStorage(@Nonnull String userFile, @Nonnull String diaryFile) {
         this.userFile = userFile;
         this.diaryFile = diaryFile;
-        System.out.println("File storage created with user file: "+userFile+", and diary file: "+diaryFile);
+        log.info("File storage created with user file: {}, and diary file: {}", userFile, diaryFile);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class FileStorage extends  Storage {
     }
 
     private boolean loadUsers(@Nonnull Map<String, User> users) {
-        System.out.println("Starting to load users");
+        log.info("Starting to load users");
         try (FileReader fileReader = new FileReader(userFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -57,14 +60,14 @@ public class FileStorage extends  Storage {
                     users.putIfAbsent(user.getLogin(), user);
                     correctEntries++;
                 } catch (JSONException ex) {
-                    System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
+                    log.error("Couldn't parse user from line, skipping it: " + line, ex);
                     errorLines++;
                 }
             }
-            System.out.println("Finished reading users, correct entries: "+correctEntries+", error entries: "+errorLines);
+            log.info("Finished reading users, correct entries: {}, error entries: {}", correctEntries, errorLines);
             return errorLines == 0;
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            log.error("Error loading users", ex);
             return false;
         }
     }
@@ -81,7 +84,7 @@ public class FileStorage extends  Storage {
     }
 
     private boolean loadDiaries(@Nonnull Map<User, Diary> diaryPerUserMap, @Nonnull Map<String, User> users) {
-        System.out.println("Starting to load diaries");
+        log.info("Starting to load diaries");
         try (FileReader fileReader = new FileReader(diaryFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -93,14 +96,14 @@ public class FileStorage extends  Storage {
                     diaryPerUserMap.put(users.get(diary.getOwnerLogin()), diary);
                     correctEntries++;
                 } catch (JSONException ex) {
-                    System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
+                    log.error("Couldn't parse user from line, skipping it: " + line, ex);
                     errorLines++;
                 }
             }
-            System.out.println("Finished reading diaries, correct entries: "+correctEntries+", error entries: "+errorLines);
+            log.info("Finished reading diaries, correct entries: {}, error entries: {}", correctEntries, errorLines);
             return errorLines == 0;
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            log.error("Error loading diaries", ex);
             return false;
         }
     }
@@ -150,9 +153,9 @@ public class FileStorage extends  Storage {
                 bufferedWriter.write(userToJson(user) +"\n");
             }
             bufferedWriter.flush();
-            System.out.println("Flushed users");
+            log.info("Flushed users");
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            log.error("Error flushing users", ex);
         }
     }
 
@@ -173,9 +176,9 @@ public class FileStorage extends  Storage {
                 bufferedWriter.write(diaryToJson(diary) + "\n");
             }
             bufferedWriter.flush();
-            System.out.println("Flushed diaries");
+            log.info("Flushed diaries");
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            log.error("Error flushing diaries", ex);
         }
     }
 

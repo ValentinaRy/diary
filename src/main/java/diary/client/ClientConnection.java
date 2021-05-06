@@ -1,16 +1,20 @@
 package diary.client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.Socket;
 
 public class ClientConnection {
+    private static final Logger log = LogManager.getLogger(ClientConnection.class);
     private final int serverPort;
     private Socket socket;
 
 
     public ClientConnection(int serverPort) {
         this.serverPort = serverPort;
-        System.out.println("Created client connector with server on port " + serverPort);
+        log.info("Created client connector with server on port " + serverPort);
     }
 
     public boolean connect() {
@@ -18,8 +22,7 @@ public class ClientConnection {
             socket = new Socket("localhost", serverPort);
             return true;
         } catch (IOException e) {
-            System.out.println("Couldn't connect to server due to error: "+e.getMessage());
-            e.printStackTrace();
+            log.error("Couldn't connect to server due to error", e);
             return false;
         }
     }
@@ -27,10 +30,9 @@ public class ClientConnection {
     public void disconnect() {
         try {
             socket.close();
-            System.out.println("Connection to server was closed");
+            log.info("Connection to server was closed");
         } catch (IOException e) {
-            System.out.println("Error during closing connection to server: "+e.getMessage());
-            e.printStackTrace();
+            log.error("Error during closing connection to server", e);
         }
     }
 }

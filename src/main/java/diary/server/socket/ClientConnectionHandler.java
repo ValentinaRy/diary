@@ -1,11 +1,15 @@
 package diary.server.socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class ClientConnectionHandler implements Runnable {
+    private static final Logger log = LogManager.getLogger(ClientConnectionHandler.class);
     private final Socket client;
 
     public ClientConnectionHandler(Socket client) {
@@ -19,17 +23,15 @@ public class ClientConnectionHandler implements Runnable {
 
             while (!client.isClosed()) {
                 String inMessage = clientInput.readUTF();
-                System.out.println("Got client message: "+inMessage);
+                log.debug("Got client message: {}", inMessage);
             }
         } catch (IOException e) {
-            System.out.println("Error while communicating with client: "+e.getMessage());
-            e.printStackTrace();
+            log.error("Error while communicating with client", e);
         } finally {
             try {
                 client.close();
             } catch (IOException e) {
-                System.out.println("Error while closing client socket: "+e.getMessage());
-                e.printStackTrace();
+                log.error("Error while closing client socket", e);
             }
         }
     }
