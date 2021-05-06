@@ -2,6 +2,7 @@ package diary;
 
 import diary.server.cmd.CmdServer;
 import diary.server.Server;
+import diary.server.socket.SocketServer;
 import diary.server.storage.FileStorage;
 import diary.server.storage.Storage;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,5 +22,11 @@ public class ServerConfig {
     @Bean
     public Server server(Storage storage) {
         return new CmdServer(storage);
+    }
+
+    @Bean
+    public Server server(Storage storage,
+                         @Value("${socket.server.port}") int port) {
+        return new SocketServer(storage, port);
     }
 }
