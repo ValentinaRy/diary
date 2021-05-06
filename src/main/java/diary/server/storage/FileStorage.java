@@ -34,6 +34,7 @@ public class FileStorage extends  Storage {
     public FileStorage(@Nonnull String userFile, @Nonnull String diaryFile) {
         this.userFile = userFile;
         this.diaryFile = diaryFile;
+        System.out.println("File storage created with user file: "+userFile+", and diary file: "+diaryFile);
     }
 
     @Override
@@ -44,19 +45,23 @@ public class FileStorage extends  Storage {
     }
 
     private boolean loadUsers(@Nonnull Map<String, User> users) {
+        System.out.println("Starting to load users");
         try (FileReader fileReader = new FileReader(userFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             int errorLines = 0;
+            int correctEntries = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 try {
                     User user = parseUser(line);
                     users.putIfAbsent(user.getLogin(), user);
+                    correctEntries++;
                 } catch (JSONException ex) {
                     System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
                     errorLines++;
                 }
             }
+            System.out.println("Finished reading users, correct entries: "+correctEntries+", error entries: "+errorLines);
             return errorLines == 0;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -76,19 +81,23 @@ public class FileStorage extends  Storage {
     }
 
     private boolean loadDiaries(@Nonnull Map<User, Diary> diaryPerUserMap, @Nonnull Map<String, User> users) {
+        System.out.println("Starting to load diaries");
         try (FileReader fileReader = new FileReader(diaryFile)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             int errorLines = 0;
+            int correctEntries = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 try {
                     Diary diary = parseDiary(line, users);
                     diaryPerUserMap.put(users.get(diary.getOwnerLogin()), diary);
+                    correctEntries++;
                 } catch (JSONException ex) {
                     System.out.println("Couldn't parse user from line, skipping it: " + line + ". Error: " + ex.getMessage());
                     errorLines++;
                 }
             }
+            System.out.println("Finished reading diaries, correct entries: "+correctEntries+", error entries: "+errorLines);
             return errorLines == 0;
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
