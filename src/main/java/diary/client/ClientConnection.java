@@ -35,4 +35,12 @@ public class ClientConnection {
             log.error("Error during closing connection to server", e);
         }
     }
+
+    public String signIn(String login, String password) {
+        return null;
+    }
+
+    public String signUp(String login, String password) {
+        return null;
+    }
 }
